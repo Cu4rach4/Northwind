@@ -3989,40 +3989,40 @@ WHERE Orders.OrderDate BETWEEN '1997-01-01' And '1997-12-31';
 
 
 CREATE VIEW `SalesTotalsbyAmount` AS
-SELECT `Order Subtotals`.Subtotal AS SaleAmount, 
+SELECT `OrderSubtotals`.Subtotal AS SaleAmount, 
                   Orders.OrderID, 
                Customers.CompanyName, 
                   Orders.ShippedDate
 FROM Customers 
  JOIN Orders ON Customers.CustomerID = Orders.CustomerID
-    JOIN `Order Subtotals` ON Orders.OrderID = `Order Subtotals`.OrderID 
-WHERE (`Order Subtotals`.Subtotal >2500) 
+    JOIN `OrderSubtotals` ON Orders.OrderID = `OrderSubtotals`.OrderID 
+WHERE (`OrderSubtotals`.Subtotal >2500) 
 AND (Orders.ShippedDate BETWEEN '1997-01-01' And '1997-12-31');
 
 
 CREATE VIEW `SummaryofSalesbyQuarter` AS
 SELECT Orders.ShippedDate, 
        Orders.OrderID, 
-       `Order Subtotals`.Subtotal
+       `OrderSubtotals`.Subtotal
 FROM Orders 
-     INNER JOIN `Order Subtotals` ON Orders.OrderID = `Order Subtotals`.OrderID
+     INNER JOIN `OrderSubtotals` ON Orders.OrderID = `OrderSubtotals`.OrderID
 WHERE Orders.ShippedDate IS NOT NULL;
 
 
 CREATE VIEW `SummaryofSalesbyYear` AS
 SELECT      Orders.ShippedDate, 
             Orders.OrderID, 
- `Order Subtotals`.Subtotal
+ `OrderSubtotals`.Subtotal
 FROM Orders 
-     INNER JOIN `Order Subtotals` ON Orders.OrderID = `Order Subtotals`.OrderID
+     INNER JOIN `OrderSubtotals` ON Orders.OrderID = `OrderSubtotals`.OrderID
 WHERE Orders.ShippedDate IS NOT NULL;
 
 
 CREATE VIEW `CategorySalesfor1997` AS
-SELECT     `Product Sales for 1997`.CategoryName, 
-       Sum(`Product Sales for 1997`.ProductSales) AS CategorySales
-FROM `Product Sales for 1997`
-GROUP BY `Product Sales for 1997`.CategoryName;
+SELECT     `ProductSalesfor1997`.CategoryName, 
+       Sum(`ProductSalesfor1997`.ProductSales) AS CategorySales
+FROM `ProductSalesfor1997`
+GROUP BY `ProductSalesfor1997`.CategoryName;
 
 
 CREATE VIEW `OrderDetailsExtended` AS
@@ -4041,14 +4041,14 @@ CREATE VIEW `SalesbyCategory` AS
 SELECT Categories.CategoryID, 
        Categories.CategoryName, 
          Products.ProductName, 
-	Sum(`OrderDetails Extended`.ExtendedPrice) AS ProductSales
+	Sum(`OrderDetailsExtended`.ExtendedPrice) AS ProductSales
 FROM  Categories 
     JOIN Products 
       ON Categories.CategoryID = Products.CategoryID
-       JOIN `OrderDetails Extended` 
-         ON Products.ProductID = `OrderDetails Extended`.ProductID                
+       JOIN `OrderDetailsExtended` 
+         ON Products.ProductID = `OrderDetailsExtended`.ProductID                
            JOIN Orders 
-             ON Orders.OrderID = `OrderDetails Extended`.OrderID 
+             ON Orders.OrderID = `OrderDetailsExtended`.OrderID 
 WHERE Orders.OrderDate BETWEEN '1997-01-01' And '1997-12-31'
 GROUP BY Categories.CategoryID, Categories.CategoryName, Products.ProductName;
 
@@ -4096,7 +4096,7 @@ END $$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `Employee Sales by Country`;
+DROP PROCEDURE IF EXISTS `EmployeeSalesbyCountry`;
 
 DELIMITER $$
 
@@ -4107,10 +4107,10 @@ BEGIN
          Employees.FirstName,
             Orders.ShippedDate,
             Orders.OrderID,
- `Order Subtotals`.Subtotal AS SaleAmount
+ `OrderSubtotals`.Subtotal AS SaleAmount
 FROM Employees
  JOIN Orders ON Employees.EmployeeID = Orders.EmployeeID
-      JOIN `Order Subtotals` ON Orders.OrderID = `Order Subtotals`.OrderID
+      JOIN `OrderSubtotals` ON Orders.OrderID = `OrderSubtotals`.OrderID
 WHERE Orders.ShippedDate Between AtBeginning_Date And AtEnding_Date;
 
 END $$
@@ -4118,7 +4118,7 @@ END $$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS `Sales by Year`;
+DROP PROCEDURE IF EXISTS `SalesbyYear`;
 
 DELIMITER $$
 
@@ -4127,9 +4127,9 @@ BEGIN
 
     SELECT Orders.ShippedDate,
 	   Orders.OrderID,
-	  `Order Subtotals`.Subtotal,
+	  `OrderSubtotals`.Subtotal,
 	  ShippedDate AS Year
-FROM Orders  JOIN `Order Subtotals` ON Orders.OrderID = `Order Subtotals`.OrderID
+FROM Orders  JOIN `OrderSubtotals` ON Orders.OrderID = `OrderSubtotals`.OrderID
 WHERE Orders.ShippedDate Between AtBeginning_Date And AtEnding_Date;
 
 END $$
