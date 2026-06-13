@@ -4311,6 +4311,8 @@ DELIMITER $$
 DROP FUNCTION IF EXISTS `DateOnly` $$
 
 CREATE FUNCTION `DateOnly` (InDateTime datetime) RETURNS VARCHAR(10)
+READS SQL DATA
+DETERMINISTIC
 BEGIN
 
   DECLARE MyOutput varchar(10);
@@ -4416,7 +4418,7 @@ select *
                   (select 1 + count(*)
                    from Employees b
                    where b.Title = a.Title
-                     and b.Salary > a.Salary) RANK
+                     and b.Salary > a.Salary) `RANK`
            from Employees as a) as x
      order by x.Title, x.RANK;
 
