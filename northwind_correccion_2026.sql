@@ -216,7 +216,7 @@ CREATE INDEX `IX_Transactions_OrderID` ON `Transactions` (`OrderID`);
       CP10 #4.
    ========================================================= */
 
-DROP TABLE IF EXISTS `Invoices`;
+DROP VIEW IF EXISTS `Invoices`;
 
 CREATE TABLE `Invoices` (
   `InvoiceID` INTEGER NOT NULL AUTO_INCREMENT,
